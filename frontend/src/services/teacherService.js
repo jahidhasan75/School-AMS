@@ -1,0 +1,15 @@
+import api from './api'
+
+const teacherService = {
+  getAll: (params) => api.get('/teachers', { params }),
+  getById: (id) => api.get(`/teachers/${id}`),
+  create: (data) => api.post('/teachers', data),
+  update: (id, data) => api.put(`/teachers/${id}`, data),
+  delete: (id) => api.delete(`/teachers/${id}`),
+  resetPassword: (id, password) => api.post(`/teachers/${id}/reset-password`, { password }),
+  uploadPhoto: (formData) => api.post('/teachers/upload-photo', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+}
+
+export default teacherService

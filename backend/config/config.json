@@ -1,0 +1,29 @@
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "school_ams",
+    "host": "localhost",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  },
+  "test": {
+    "username": "root",
+    "password": "",
+    "database": "school_ams_test",
+    "host": "localhost",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  },
+  "production": {
+    "username": "root",
+    "password": null,
+    "database": "school_ams",
+    "host": "localhost",
+    "port": 3306,
+    "dialect": "mysql",
+    "logging": false
+  }
+}
