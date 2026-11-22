@@ -4,7 +4,9 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 
-const uploadDir = process.env.UPLOAD_DIR || 'uploads';
+const uploadDir = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : path.join(__dirname, '..', 'uploads');
 
 // Subdirectories mapped by upload category
 const SUBDIRS = {
@@ -14,16 +16,23 @@ const SUBDIRS = {
   misc: 'misc'
 };
 
-// Ensure base upload directory and category subdirectories exist
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-Object.values(SUBDIRS).forEach(sub => {
-  const dirPath = path.join(uploadDir, sub);
-  if (!fs.existsSync(dirPath)) {
-    fs.mkdirSync(dirPath, { recursive: true });
+// Ensure base upload directory and category subdirectories exist safely
+const ensureUploadDirs = () => {
+  try {
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    Object.values(SUBDIRS).forEach(sub => {
+      const dirPath = path.join(uploadDir, sub);
+      if (!fs.existsSync(dirPath)) {
+        fs.mkdirSync(dirPath, { recursive: true });
+      }
+    });
+  } catch (err) {
+    console.warn('⚠️ Could not pre-create upload directories (may be on read-only serverless filesystem):', err.message);
   }
-});
+};
+ensureUploadDirs();
 
 /**
  * Helper to generate disk storage for a specific category subdirectory

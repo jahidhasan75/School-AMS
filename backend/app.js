@@ -37,8 +37,11 @@ app.use(generalLimiter);
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve uploaded files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve uploaded files using the same resolved upload directory
+const resolvedUploadDir = process.env.UPLOAD_DIR
+  ? path.resolve(process.env.UPLOAD_DIR)
+  : path.join(__dirname, 'uploads');
+app.use('/uploads', express.static(resolvedUploadDir));
 
 // Routes
 app.use('/api/auth', authLimiter, require('./routes/auth'));
